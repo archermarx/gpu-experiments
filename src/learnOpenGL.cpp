@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+// declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 unsigned int createShaderProgram(const std::vector<std::string>& sources, const std::vector<unsigned int>& types);
@@ -14,17 +15,21 @@ unsigned int compileShader(const char* source, const unsigned int type);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-const std::string vertexShaderSource = "#version 330 core\n"
-    "layout(location=0) in vec3 aPos;\n"
-    "void main(){\n"
-    "gl_Position=vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+const std::string vertexShaderSource = R"""(
+#version 330 core
+layout(location=0) in vec3 aPos;
+void main(){
+    gl_Position=vec4(aPos.x, aPos.y, aPos.z, 1.0);
+};
+)""";
 
-const std::string fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main(){\n"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
+const std::string fragmentShaderSource = R"""(
+#version 330 core
+out vec4 FragColor;
+void main(){
+    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+};
+)""";
 
 unsigned int createShaderProgram(const std::vector<std::string>& sources, const std::vector<unsigned int>& types) {
 

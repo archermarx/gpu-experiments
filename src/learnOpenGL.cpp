@@ -34,6 +34,7 @@ unsigned int createShaderProgram(const std::vector<std::string>& sources, const 
     for (int i = 0; i < N; i++) {
         auto shader = compileShader(sources[i].c_str(), types[i]);
         glAttachShader(shaderProgram, shader);
+        glDeleteShader(shader);
     }
 
     glLinkProgram(shaderProgram);

@@ -36,7 +36,7 @@ const unsigned int NUM_PIXELS_Y = 50;
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 1000;
 
-const int SLEEP_INTERVAL = 10;
+const int SLEEP_INTERVAL = 0;
 
 int wrap(int a, int b) {
     return (b + (a % b)) % b;

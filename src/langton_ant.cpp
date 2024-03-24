@@ -8,6 +8,13 @@ LangtonAnt::LangtonAnt(int _nx, int _ny, std::pair<int, int> _pos, Direction _di
       dir(_dir),
       state(nx, std::vector<bool>(ny, true)) {}
 
+LangtonAnt::LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir)
+    : nx(_nx),
+      ny(_ny),
+      pos((int)(_pos.first * nx), (int)(_pos.second*ny)),
+      dir(_dir),
+      state(nx, std::vector<bool>(ny, true)) {}
+
 void LangtonAnt::update() {
     // get current board state (false -> black or true -> white)
     bool currentState = state[pos.first][pos.second];

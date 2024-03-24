@@ -13,33 +13,40 @@
 #include "canvas.h"
 #include "shader.h"
 
-// settings
-const unsigned int NUM_PIXELS_X = 100;
-const unsigned int NUM_PIXELS_Y = 100;
-
-const unsigned int SCR_WIDTH = 1000;
-const unsigned int SCR_HEIGHT = 1000;
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(Window window){
+    if (glfwGetKey(window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window.window, true);
+}
 
 int main(void){
 
-    Window window("OpenGL", SCR_WIDTH, SCR_HEIGHT);
+    unsigned int width = 1000, height = 1000;
+    unsigned int pixelWidth = 100, pixelHeight = 100;
+
+    // Create a window and check that it worked successfully
+    Window window("OpenGL", width, height);
 
     if (!window.open){
         return -1;
     }
 
-    Canvas canvas(NUM_PIXELS_X, NUM_PIXELS_Y);
+    // Create the canvas of pixels
+    Canvas canvas(pixelWidth, pixelHeight);
 
+    // Create our ant and associated state
     LangtonAnt ant(
-        NUM_PIXELS_X, NUM_PIXELS_Y,
-        std::make_pair(NUM_PIXELS_X / 2, NUM_PIXELS_Y / 2),
+        pixelWidth, pixelHeight,
+        std::make_pair(0.8f, 0.1f),
         0
     );
 
-    bool window_open = true;
-
     // Render loop
     while(window.open) {
+        // Check for user input
+        processInput(window);
+
         // update the ant state
         ant.update();
         ant.draw(canvas);
@@ -47,6 +54,7 @@ int main(void){
         // render the canvas
         canvas.render();
 
+        // Check for updates
         window.checkForUpdates();
     }
 

@@ -30,6 +30,7 @@ class LangtonAnt {
         std::vector<std::vector<bool>> state;
 
         LangtonAnt(int _nx, int _ny, std::pair<int, int> _pos, Direction _dir);
+        LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir);
         void update();
         void draw(Canvas& canvas);
 };

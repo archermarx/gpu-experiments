@@ -38,7 +38,7 @@ int main(void){
     // Create our ant and associated state
     LangtonAnt ant(
         pixelWidth, pixelHeight,
-        std::make_pair(0.8f, 0.1f),
+        std::make_pair(0.5f, 0.5f),
         0
     );
 

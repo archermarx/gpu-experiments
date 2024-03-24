@@ -6,6 +6,21 @@
 #include <vector>
 #include <math.h>
 #include "shader.h"
+#include <utility>
+
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
+void delay (uint32_t ms) {
+#ifdef WIN_32
+    Sleep(ms);
+#else
+    usleep(ms * 1000);
+#endif
+}
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -15,9 +30,78 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int NUM_PIXELS_X = 50;
+const unsigned int NUM_PIXELS_Y = 50;
 
+const unsigned int SCR_WIDTH = 1000;
+const unsigned int SCR_HEIGHT = 1000;
+
+const int SLEEP_INTERVAL = 10;
+
+int wrap(int a, int b) {
+    return (b + (a % b)) % b;
+}
+
+void fillCanvas(std::vector<GLubyte>& canvas, int nx, int ny, int r, int g, int b) {
+    int pixelIndex = 0;
+    for (int y = 0; y < nx; y++) {
+        for (int x = 0; x < ny; x++) {
+            canvas[pixelIndex] = r;
+            canvas[pixelIndex+1] = g;
+            canvas[pixelIndex+2] = b;
+            canvas[pixelIndex+3] = 255;
+            pixelIndex += 4;
+        }
+    }
+}
+
+std::vector<GLubyte> generateCanvas(int nx, int ny, int r, int g, int b) {
+    int num_pixels = nx * ny;
+    std::vector<GLubyte> canvas(num_pixels * 4);
+    fillCanvas(canvas, nx, ny, r, g, b);
+    return canvas;
+}
+
+
+void drawAntState(std::vector<GLubyte>& canvas, const std::vector<std::vector<bool>> antState) {
+    int pixelIndex = 0;
+    for (auto& row: antState) {
+        for (auto state: row) {
+            int color = state ? 255 : 0;
+            canvas[pixelIndex] = color;
+            canvas[pixelIndex+1] = color;
+            canvas[pixelIndex+2] = color;
+            canvas[pixelIndex+3] = 255;
+            pixelIndex += 4;
+        }
+    }
+}
+
+const std::vector<std::pair<int, int>> directions(
+    {std::make_pair(1, 0), std::make_pair(0, 1), std::make_pair(-1, 0), std::make_pair(0, -1)}
+);
+
+void updateAntState(std::vector<std::vector<bool>>& antState, std::pair<int, int>& antPos, int& antDir) {
+    // get current board state (false -> black or true -> white)
+    bool currentState = antState[antPos.first][antPos.second];
+
+    // flip color of square
+    antState[antPos.first][antPos.second] = !currentState;
+
+    // rotate ant
+    if (currentState) {
+        antDir = wrap(antDir + 1, 4);
+    } else {
+        antDir = wrap(antDir - 1, 4);
+    }
+
+    // move ant, wrapping on boundaries
+    auto nx = antState.size();
+    auto ny = antState[0].size();
+    auto& dir = directions[antDir];
+    antPos.first = wrap(antPos.first + dir.first, nx);
+    antPos.second = wrap(antPos.second + dir.second, ny);
+}
 
 int main(void)
 {
@@ -53,10 +137,10 @@ int main(void)
     // ------------------------------------------------------------------
     float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f,   // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,     1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,     0.0f, 0.0f,   // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,     0.0f, 1.0f    // top left
+         1.0f,  1.0f, 1.0f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f,   // top right
+         1.0f, -1.0f, 1.0f,   0.0f, 1.0f, 0.0f,     1.0f, 0.0f,   // bottom right
+        -1.0f, -1.0f, 1.0f,   0.0f, 0.0f, 1.0f,     0.0f, 0.0f,   // bottom left
+        -1.0f,  1.0f, 1.0f,   1.0f, 1.0f, 0.0f,     0.0f, 1.0f    // top left
     };
 
     unsigned int indices[] = {  // note that we start from 0!
@@ -98,30 +182,24 @@ int main(void)
     // when it's not directly necessary.
     glBindVertexArray(0);
 
-    // Load texture from file and generate glTexture
+    std::vector<GLubyte> canvas = generateCanvas(NUM_PIXELS_X, NUM_PIXELS_Y, 255, 255, 255);
+    std::vector<std::vector<bool>> antState(NUM_PIXELS_X, std::vector<bool>(NUM_PIXELS_Y, true));
+
+    std::pair<int, int> antPos = std::make_pair(NUM_PIXELS_X / 2, NUM_PIXELS_Y / 2);
+    auto antDir = 0;
+
     unsigned int texture;
-    std::string imagePath = "textures/container.jpg";
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    // set the texture wrapping/filtering options (on the currently bound texture object)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load and generate texture
-    int width, height, nrChannels;
-    unsigned char *data = stbi_load(imagePath.c_str(), &width, &height, &nrChannels, 0);
-
-    if(data){
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cout << "Failed to load texture " << imagePath << std::endl;
-    }
-    stbi_image_free(data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
+        GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.data()
+    );
 
     // uncomment this call to draw in wireframe polygons.
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Render loop!
     while(!glfwWindowShouldClose(window)) {
@@ -135,6 +213,15 @@ int main(void)
         // Activate the shader
         shader.use();
 
+        // update the texture
+        updateAntState(antState, antPos, antDir);
+        drawAntState(canvas, antState);
+
+        glTexImage2D(
+            GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.data()
+        );
+
         // Render the triangles
         glBindTexture(GL_TEXTURE_2D, texture);
         glBindVertexArray(VAO);
@@ -146,6 +233,8 @@ int main(void)
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        delay(SLEEP_INTERVAL);
     }
 
     glfwTerminate();

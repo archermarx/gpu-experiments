@@ -28,19 +28,6 @@ const unsigned int SCR_HEIGHT = 1000;
 
 const int SLEEP_INTERVAL = 0;
 
-void fillCanvas(std::vector<GLubyte>& canvas, int nx, int ny, int r, int g, int b) {
-    int pixelIndex = 0;
-    for (int y = 0; y < nx; y++) {
-        for (int x = 0; x < ny; x++) {
-            canvas[pixelIndex] = r;
-            canvas[pixelIndex+1] = g;
-            canvas[pixelIndex+2] = b;
-            canvas[pixelIndex+3] = 255;
-            pixelIndex += 4;
-        }
-    }
-}
-
 int main(void)
 {
     glfwInit();
@@ -128,6 +115,8 @@ int main(void)
         0
     );
 
+    ant.draw(canvas);
+
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -149,7 +138,7 @@ int main(void)
 
         // update the texture
         ant.update();
-        ant.draw(canvas.contents);
+        ant.draw(canvas);
 
         // Activate the shader
         shader.use();

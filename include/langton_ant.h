@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <utility>
 #include <vector>
+#include "canvas.h"
 
 using Direction = int8_t;
 
@@ -30,7 +31,7 @@ class LangtonAnt {
 
         LangtonAnt(int _nx, int _ny, std::pair<int, int> _pos, Direction _dir);
         void update();
-        void draw(std::vector<uint8_t>&);
+        void draw(Canvas& canvas);
 };
 
 #endif

@@ -31,15 +31,15 @@ void LangtonAnt::update() {
     pos.second = wrap<int>(pos.second + direction.second, ny);
 }
 
-void LangtonAnt::draw(std::vector<uint8_t>& canvas) {
+void LangtonAnt::draw(Canvas& canvas) {
     int pixelIndex = 0;
     for (auto& row: state) {
         for (auto stateVal: row) {
             int color = stateVal ? 255 : 0;
-            canvas[pixelIndex] = color;
-            canvas[pixelIndex+1] = color;
-            canvas[pixelIndex+2] = color;
-            canvas[pixelIndex+3] = 255;
+            canvas.contents[pixelIndex] = color;
+            canvas.contents[pixelIndex+1] = color;
+            canvas.contents[pixelIndex+2] = color;
+            canvas.contents[pixelIndex+3] = 255;
             pixelIndex += 4;
         }
     }

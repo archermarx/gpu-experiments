@@ -7,14 +7,11 @@
 #include <math.h>
 #include <utility>
 
+#include "window.h"
 #include "utils.h"
 #include "langton_ant.h"
 #include "canvas.h"
 #include "shader.h"
-
-// declarations
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
 
 // settings
 const unsigned int NUM_PIXELS_X = 100;
@@ -23,30 +20,11 @@ const unsigned int NUM_PIXELS_Y = 100;
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 1000;
 
-int main(void)
-{
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+int main(void){
 
-    // Create a window and verify that it worked.
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
+    Window window("OpenGL", SCR_WIDTH, SCR_HEIGHT);
 
-    // Make the context of our window the main context on the current thread
-    glfwMakeContextCurrent(window);
-    // Window resizing callback
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    // Check that GLAD is loaded properly
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        glfwTerminate();
+    if (!window.open){
         return -1;
     }
 
@@ -58,10 +36,10 @@ int main(void)
         0
     );
 
-    // Render loop
-    while(!glfwWindowShouldClose(window)) {
-        processInput(window);
+    bool window_open = true;
 
+    // Render loop
+    while(window.open) {
         // update the ant state
         ant.update();
         ant.draw(canvas);
@@ -69,29 +47,9 @@ int main(void)
         // render the canvas
         canvas.render();
 
-        // check and call events and swap the buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        window.checkForUpdates();
     }
-
-    glfwTerminate();
 
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    // make sure the viewport matches the new window dimensions; note that width and
-    // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
-}

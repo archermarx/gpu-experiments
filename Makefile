@@ -5,6 +5,7 @@ SRC_DIR=src
 EXE=run.exe
 SRCS=\
 	main.cpp	\
+	window.cpp  \
 	canvas.cpp 	\
 	shader.cpp	\
 	utils.cpp	\

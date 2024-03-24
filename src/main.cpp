@@ -55,58 +55,6 @@ int main(void)
         return -1;
     }
 
-    // set up shaders
-    Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl");
-
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float vertices[] = {
-        // positions          // colors           // texture coords
-         1.0f,  1.0f, 1.0f,   1.0f, 0.0f, 0.0f,     1.0f, 1.0f,   // top right
-         1.0f, -1.0f, 1.0f,   0.0f, 1.0f, 0.0f,     1.0f, 0.0f,   // bottom right
-        -1.0f, -1.0f, 1.0f,   0.0f, 0.0f, 1.0f,     0.0f, 0.0f,   // bottom left
-        -1.0f,  1.0f, 1.0f,   1.0f, 1.0f, 0.0f,     0.0f, 1.0f    // top left
-    };
-
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3
-    };
-
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    // bind the vertex array object first, then bind and set vertex buffers, and then configure vertex attribute(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // Define attributes
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
-    glEnableVertexAttribArray(0);
-
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    // Texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    // note that this is allowed. the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex
-    // buffer object so afterwards we can safely unbind,
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens.
-    // Modifying other VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VAOs)
-    // when it's not directly necessary.
-    glBindVertexArray(0);
-
     Canvas canvas(NUM_PIXELS_X, NUM_PIXELS_Y);
 
     LangtonAnt ant(
@@ -115,45 +63,17 @@ int main(void)
         0
     );
 
-    ant.draw(canvas);
-
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D(
-        GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
-        GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.contents.data()
-    );
-
-    // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
     // Render loop!
     while(!glfwWindowShouldClose(window)) {
         // input
         processInput(window);
-
 
         // update the texture
         ant.update();
         ant.draw(canvas);
 
         // Activate the shader
-        shader.use();
-        glTexImage2D(
-            GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
-            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.contents.data()
-        );
-
-        // Render the triangles
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        canvas.render();
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);

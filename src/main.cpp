@@ -39,7 +39,9 @@ int main(void){
     LangtonAnt ant(
         pixelWidth, pixelHeight,
         std::make_pair(0.5f, 0.5f),
-        0
+        0,
+        "LRRRRRLLR",
+        std::vector<Color>({BLACK, CYAN, MAGENTA, YELLOW, RED, GREEN, BLUE, WHITE, Color(0.5, 0.5, 0.5)})
     );
 
     // Render loop

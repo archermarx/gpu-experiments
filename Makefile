@@ -12,7 +12,8 @@ _DEPS=\
 	window.h \
 	canvas.h \
 	shader.h \
-	langton_ant.h
+	langton_ant.h \
+	color.h
 
 DEPS=$(addprefix $(INC_DIR)/, $(_DEPS))
 

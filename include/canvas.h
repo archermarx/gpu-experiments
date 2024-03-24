@@ -8,11 +8,11 @@
 
 const float
 SCREEN_QUAD_VERTS[] = {
-    // positions          // texture coords
-     1.0f,  1.0f, 1.0f,   1.0f, 1.0f,   // top right
-     1.0f, -1.0f, 1.0f,   1.0f, 0.0f,   // bottom right
-    -1.0f, -1.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -1.0f,  1.0f, 1.0f,   0.0f, 1.0f    // top left
+    // 2D positions     // texture coords
+     1.0f,  1.0f,       1.0f, 1.0f,   // top right
+     1.0f, -1.0f,       1.0f, 0.0f,   // bottom right
+    -1.0f, -1.0f,       0.0f, 0.0f,   // bottom left
+    -1.0f,  1.0f,       0.0f, 1.0f    // top left
 };
 
 const unsigned int

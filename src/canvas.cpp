@@ -25,11 +25,11 @@ Canvas::Canvas(uint32_t w, uint32_t h)
 
     // Define attributes
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
 
     // Texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3* sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2* sizeof(float)));
     glEnableVertexAttribArray(1);
 
     // note that this is allowed. the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex

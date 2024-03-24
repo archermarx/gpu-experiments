@@ -4,7 +4,7 @@ CFLAGS=-lglfw -lGL -lX11 -lXi -lpthread -lXrandr -ldl -I$(INC_DIR)
 SRC_DIR=src
 EXE=run.exe
 SRCS=\
-	learnOpenGL.cpp	\
+	main.cpp	\
 	shader.cpp	\
 	utils.cpp	\
 	langton_ant.cpp \

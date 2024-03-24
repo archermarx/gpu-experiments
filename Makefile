@@ -7,6 +7,7 @@ SRCS=\
 	$(SRC_DIR)/learnOpenGL.cpp	\
 	$(SRC_DIR)/shader.cpp	\
 	$(SRC_DIR)/utils.cpp	\
+	$(SRC_DIR)/langton_ant.cpp \
 	$(SRC_DIR)/glad.c
 
 main: $(SRCS)

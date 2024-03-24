@@ -7,8 +7,8 @@
 #include <math.h>
 #include <utility>
 
-
 #include "utils.h"
+#include "langton_ant.h"
 #include "shader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -59,32 +59,6 @@ void drawAntState(std::vector<GLubyte>& canvas, const std::vector<std::vector<bo
             pixelIndex += 4;
         }
     }
-}
-
-const std::vector<std::pair<int, int>> directions(
-    {std::make_pair(1, 0), std::make_pair(0, 1), std::make_pair(-1, 0), std::make_pair(0, -1)}
-);
-
-void updateAntState(std::vector<std::vector<bool>>& antState, std::pair<int, int>& antPos, int& antDir) {
-    // get current board state (false -> black or true -> white)
-    bool currentState = antState[antPos.first][antPos.second];
-
-    // flip color of square
-    antState[antPos.first][antPos.second] = !currentState;
-
-    // rotate ant
-    if (currentState) {
-        antDir = wrap<int>(antDir + 1, 4);
-    } else {
-        antDir = wrap<int>(antDir - 1, 4);
-    }
-
-    // move ant, wrapping on boundaries
-    auto nx = antState.size();
-    auto ny = antState[0].size();
-    auto& dir = directions[antDir];
-    antPos.first = wrap<int>(antPos.first + dir.first, nx);
-    antPos.second = wrap<int>(antPos.second + dir.second, ny);
 }
 
 int main(void)
@@ -167,10 +141,12 @@ int main(void)
     glBindVertexArray(0);
 
     std::vector<GLubyte> canvas = generateCanvas(NUM_PIXELS_X, NUM_PIXELS_Y, 255, 255, 255);
-    std::vector<std::vector<bool>> antState(NUM_PIXELS_X, std::vector<bool>(NUM_PIXELS_Y, true));
 
-    std::pair<int, int> antPos = std::make_pair(NUM_PIXELS_X / 2, NUM_PIXELS_Y / 2);
-    auto antDir = 0;
+    auto ant = LangtonAnt(
+        NUM_PIXELS_X, NUM_PIXELS_Y,
+        std::make_pair(NUM_PIXELS_X / 2, NUM_PIXELS_Y / 2),
+        0
+    );
 
     unsigned int texture;
     glGenTextures(1, &texture);
@@ -198,8 +174,8 @@ int main(void)
         shader.use();
 
         // update the texture
-        updateAntState(antState, antPos, antDir);
-        drawAntState(canvas, antState);
+        ant.update();
+        drawAntState(canvas, ant.state);
 
         glTexImage2D(
             GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,

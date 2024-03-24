@@ -19,8 +19,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int NUM_PIXELS_X = 50;
-const unsigned int NUM_PIXELS_Y = 50;
+const unsigned int NUM_PIXELS_X = 100;
+const unsigned int NUM_PIXELS_Y = 100;
 
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 1000;
@@ -47,19 +47,7 @@ std::vector<GLubyte> generateCanvas(int nx, int ny, int r, int g, int b) {
     return canvas;
 }
 
-void drawAntState(std::vector<GLubyte>& canvas, const std::vector<std::vector<bool>> antState) {
-    int pixelIndex = 0;
-    for (auto& row: antState) {
-        for (auto state: row) {
-            int color = state ? 255 : 0;
-            canvas[pixelIndex] = color;
-            canvas[pixelIndex+1] = color;
-            canvas[pixelIndex+2] = color;
-            canvas[pixelIndex+3] = 255;
-            pixelIndex += 4;
-        }
-    }
-}
+
 
 int main(void)
 {
@@ -140,7 +128,7 @@ int main(void)
     // when it's not directly necessary.
     glBindVertexArray(0);
 
-    std::vector<GLubyte> canvas = generateCanvas(NUM_PIXELS_X, NUM_PIXELS_Y, 255, 255, 255);
+    std::vector<uint8_t> canvas = generateCanvas(NUM_PIXELS_X, NUM_PIXELS_Y, 255, 255, 255);
 
     auto ant = LangtonAnt(
         NUM_PIXELS_X, NUM_PIXELS_Y,
@@ -175,7 +163,7 @@ int main(void)
 
         // update the texture
         ant.update();
-        drawAntState(canvas, ant.state);
+        ant.draw(canvas);
 
         glTexImage2D(
             GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,

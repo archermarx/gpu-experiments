@@ -4,14 +4,16 @@ CFLAGS=-lglfw -lGL -lX11 -lXi -lpthread -lXrandr -ldl -I$(INC_DIR)
 SRC_DIR=src
 EXE=run.exe
 SRCS=\
-	$(SRC_DIR)/learnOpenGL.cpp	\
-	$(SRC_DIR)/shader.cpp	\
-	$(SRC_DIR)/utils.cpp	\
-	$(SRC_DIR)/langton_ant.cpp \
-	$(SRC_DIR)/glad.c
+	learnOpenGL.cpp	\
+	shader.cpp	\
+	utils.cpp	\
+	langton_ant.cpp \
+	glad.c
 
-main: $(SRCS)
-	$(CC) -pthread -o $(EXE) $(SRCS) $(CFLAGS)
+SRC_FILES=$(addprefix $(SRC_DIR)/, $(SRCS))
+
+main: $(SRC_FILES)
+	$(CC) -pthread -o $(EXE) $(SRC_FILES) $(CFLAGS)
 
 clean:
 	@rm -f $(EXE)

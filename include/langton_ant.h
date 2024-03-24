@@ -30,7 +30,7 @@ class LangtonAnt {
 
         LangtonAnt(int _nx, int _ny, std::pair<int, int> _pos, Direction _dir);
         void update();
-        void draw();
+        void draw(std::vector<uint8_t>&);
 };
 
 #endif

@@ -43,7 +43,7 @@ int main(void)
     }
 
     // set up shaders
-    auto shader = Shader("shaders/vertex.glsl", "shaders/fragment.glsl");
+    Shader shader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------

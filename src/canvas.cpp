@@ -10,6 +10,7 @@ Canvas::Canvas(uint32_t w, uint32_t h)
       contents(w * h * 4),
       shader("shaders/canvas.vert", "shaders/canvas.frag") {
 
+    // set up vertex data (and buffer(s)) and configure vertex attributes
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -24,16 +25,12 @@ Canvas::Canvas(uint32_t w, uint32_t h)
 
     // Define attributes
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*) 0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3* sizeof(float)));
-    glEnableVertexAttribArray(1);
-
     // Texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6* sizeof(float)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // note that this is allowed. the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex
     // buffer object so afterwards we can safely unbind,
@@ -51,8 +48,11 @@ Canvas::Canvas(uint32_t w, uint32_t h)
 }
 
 void Canvas::render() {
+
+    // activate our shader
     shader.use();
 
+    // update the texture
     glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)contents.data()

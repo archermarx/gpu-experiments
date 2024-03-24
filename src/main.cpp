@@ -12,9 +12,6 @@
 #include "canvas.h"
 #include "shader.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
 // declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -25,8 +22,6 @@ const unsigned int NUM_PIXELS_Y = 100;
 
 const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 1000;
-
-const int SLEEP_INTERVAL = 0;
 
 int main(void)
 {
@@ -63,23 +58,20 @@ int main(void)
         0
     );
 
-    // Render loop!
+    // Render loop
     while(!glfwWindowShouldClose(window)) {
-        // input
         processInput(window);
 
-        // update the texture
+        // update the ant state
         ant.update();
         ant.draw(canvas);
 
-        // Activate the shader
+        // render the canvas
         canvas.render();
 
         // check and call events and swap the buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
-
-        delay(SLEEP_INTERVAL);
     }
 
     glfwTerminate();

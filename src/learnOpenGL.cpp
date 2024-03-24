@@ -5,22 +5,11 @@
 #include <string>
 #include <vector>
 #include <math.h>
-#include "shader.h"
 #include <utility>
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
 
-void delay (uint32_t ms) {
-#ifdef WIN_32
-    Sleep(ms);
-#else
-    usleep(ms * 1000);
-#endif
-}
+#include "utils.h"
+#include "shader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -37,10 +26,6 @@ const unsigned int SCR_WIDTH = 1000;
 const unsigned int SCR_HEIGHT = 1000;
 
 const int SLEEP_INTERVAL = 0;
-
-int wrap(int a, int b) {
-    return (b + (a % b)) % b;
-}
 
 void fillCanvas(std::vector<GLubyte>& canvas, int nx, int ny, int r, int g, int b) {
     int pixelIndex = 0;
@@ -61,7 +46,6 @@ std::vector<GLubyte> generateCanvas(int nx, int ny, int r, int g, int b) {
     fillCanvas(canvas, nx, ny, r, g, b);
     return canvas;
 }
-
 
 void drawAntState(std::vector<GLubyte>& canvas, const std::vector<std::vector<bool>> antState) {
     int pixelIndex = 0;
@@ -90,17 +74,17 @@ void updateAntState(std::vector<std::vector<bool>>& antState, std::pair<int, int
 
     // rotate ant
     if (currentState) {
-        antDir = wrap(antDir + 1, 4);
+        antDir = wrap<int>(antDir + 1, 4);
     } else {
-        antDir = wrap(antDir - 1, 4);
+        antDir = wrap<int>(antDir - 1, 4);
     }
 
     // move ant, wrapping on boundaries
     auto nx = antState.size();
     auto ny = antState[0].size();
     auto& dir = directions[antDir];
-    antPos.first = wrap(antPos.first + dir.first, nx);
-    antPos.second = wrap(antPos.second + dir.second, ny);
+    antPos.first = wrap<int>(antPos.first + dir.first, nx);
+    antPos.second = wrap<int>(antPos.second + dir.second, ny);
 }
 
 int main(void)

@@ -5,6 +5,7 @@ SRC_DIR=src
 EXE=run.exe
 SRCS=\
 	main.cpp	\
+	canvas.cpp 	\
 	shader.cpp	\
 	utils.cpp	\
 	langton_ant.cpp \

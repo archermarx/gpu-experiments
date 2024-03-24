@@ -9,6 +9,7 @@
 
 #include "utils.h"
 #include "langton_ant.h"
+#include "canvas.h"
 #include "shader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -39,15 +40,6 @@ void fillCanvas(std::vector<GLubyte>& canvas, int nx, int ny, int r, int g, int 
         }
     }
 }
-
-std::vector<GLubyte> generateCanvas(int nx, int ny, int r, int g, int b) {
-    int num_pixels = nx * ny;
-    std::vector<GLubyte> canvas(num_pixels * 4);
-    fillCanvas(canvas, nx, ny, r, g, b);
-    return canvas;
-}
-
-
 
 int main(void)
 {
@@ -128,9 +120,9 @@ int main(void)
     // when it's not directly necessary.
     glBindVertexArray(0);
 
-    std::vector<uint8_t> canvas = generateCanvas(NUM_PIXELS_X, NUM_PIXELS_Y, 255, 255, 255);
+    Canvas canvas(NUM_PIXELS_X, NUM_PIXELS_Y);
 
-    auto ant = LangtonAnt(
+    LangtonAnt ant(
         NUM_PIXELS_X, NUM_PIXELS_Y,
         std::make_pair(NUM_PIXELS_X / 2, NUM_PIXELS_Y / 2),
         0
@@ -143,7 +135,7 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
-        GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.data()
+        GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.contents.data()
     );
 
     // uncomment this call to draw in wireframe polygons.
@@ -154,20 +146,16 @@ int main(void)
         // input
         processInput(window);
 
-        // set background color
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Activate the shader
-        shader.use();
 
         // update the texture
         ant.update();
-        ant.draw(canvas);
+        ant.draw(canvas.contents);
 
+        // Activate the shader
+        shader.use();
         glTexImage2D(
             GL_TEXTURE_2D, 0, GL_RGBA, NUM_PIXELS_X, NUM_PIXELS_Y, 0,
-            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.data()
+            GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)canvas.contents.data()
         );
 
         // Render the triangles

@@ -6,6 +6,7 @@
 #include <vector>
 #include "canvas.h"
 #include "color.h"
+#include "automaton.h"
 
 using Direction = int8_t;
 
@@ -22,20 +23,18 @@ directions({
     std::make_pair( 0, -1)    // south
 });
 
-class LangtonAnt {
+class LangtonAnt : public Automaton<uint8_t>{
     public:
-        const int nx, ny;
         std::pair<int, int> pos;
         Direction dir;
-        std::vector<std::vector<uint8_t>> state;
         std::vector<bool> rules;
         std::vector<Color> colors;
 
         LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir);
         LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir, std::string rules, std::vector<Color> colors);
 
-        void update();
-        void draw(Canvas& canvas);
+        virtual void update();
+        virtual Color getColor(uint8_t stateVal);
 };
 
 #endif

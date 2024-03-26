@@ -37,28 +37,28 @@ int main(void){
     Canvas canvas(pixelWidth, pixelHeight);
 
     // Create our ant and associated state
-    // LangtonAnt ant(
-    //     pixelWidth, pixelHeight,
-    //     std::make_pair(0.8f, 0.2f),
-    //     0,
-    //     "RRLLLRLLLRRR",
-    //     std::vector<Color>({
-    //         BLACK, CYAN, MAGENTA,
-    //         YELLOW, RED, GREEN,
-    //         BLUE, WHITE, Color(127, 127, 127),
-    //         Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
-    //     })
-    // );
+    LangtonAnt automaton(
+        pixelWidth, pixelHeight,
+        std::make_pair(0.8f, 0.2f),
+        0,
+        "RRLLLRLLLRRR",
+        std::vector<Color>({
+            BLACK, CYAN, MAGENTA,
+            YELLOW, RED, GREEN,
+            BLUE, WHITE, Color(127, 127, 127),
+            Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
+        })
+    );
 
-    GameOfLife life(pixelWidth, pixelHeight);
+    // GameOfLife automaton(pixelWidth, pixelHeight);
 
-    int i = pixelWidth / 2;
-    int j = pixelHeight / 2;
-    life.set(i,j, true);
-    life.set(i-1,j,true);
-    life.set(i,j-1,true);
-    life.set(i,j+1, true);
-    life.set(i+1,j+1, true);
+    // int i = pixelWidth / 2;
+    // int j = pixelHeight / 2;
+    // life.set(i,j, true);
+    // life.set(i-1,j,true);
+    // life.set(i,j-1,true);
+    // life.set(i,j+1, true);
+    // life.set(i+1,j+1, true);
 
     // Render loop
     while(window.open) {
@@ -66,11 +66,11 @@ int main(void){
         processInput(window);
 
         // draw state
-        life.draw(canvas);
+        automaton.draw(canvas);
         canvas.render();
 
         // update state
-        life.update();
+        automaton.update();
 
         // Check for updates
         window.checkForUpdates();

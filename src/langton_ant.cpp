@@ -2,20 +2,16 @@
 #include "utils.h"
 
 LangtonAnt::LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir)
-    : nx(_nx),
-      ny(_ny),
+    : Automaton<uint8_t>(_nx, _ny),
       pos((int)(_pos.first * nx), (int)(_pos.second*ny)),
       dir(_dir),
-      state(nx, std::vector<uint8_t>(ny, 0)),
       rules({true, false}),
       colors({WHITE, BLACK}) {}
 
 LangtonAnt::LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction _dir, std::string _rules, std::vector<Color> _colors)
-    : nx(_nx),
-      ny(_ny),
+    : Automaton<uint8_t>(_nx, _ny),
       pos((int)(_pos.first * nx), (int)(_pos.second*ny)),
       dir(_dir),
-      state(nx, std::vector<uint8_t>(ny, 0)),
       rules(_rules.size()),
       colors(_colors) {
 
@@ -56,17 +52,7 @@ void LangtonAnt::update() {
     pos.second = wrap<int>(pos.second + direction.second, ny);
 }
 
-void LangtonAnt::draw(Canvas& canvas) {
-    int pixelIndex = 0;
-    for (auto& row: state) {
-        for (auto stateVal: row) {
-            auto color_ind = wrap<uint8_t>(stateVal, colors.size());
-            auto color = colors[color_ind];
-            canvas.contents[pixelIndex] = color.r;
-            canvas.contents[pixelIndex+1] = color.g;
-            canvas.contents[pixelIndex+2] = color.b;
-            canvas.contents[pixelIndex+3] = 255;
-            pixelIndex += 4;
-        }
-    }
+Color LangtonAnt::getColor(uint8_t stateVal) {
+    auto color_ind = wrap<uint8_t>(stateVal, colors.size());
+    return colors[color_ind];
 }

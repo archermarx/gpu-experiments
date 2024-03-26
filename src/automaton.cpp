@@ -18,3 +18,7 @@ void Automaton::draw(Canvas& canvas) {
 int Automaton::get(unsigned int i, unsigned int j) {
     return state[wrap(i, nx)][wrap(j, ny)];
 }
+
+void Automaton::set(unsigned int i, unsigned int j, int stateVal){
+    state[wrap(i, nx)][wrap(j, ny)] = stateVal;
+}

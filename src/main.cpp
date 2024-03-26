@@ -54,11 +54,11 @@ int main(void){
 
     int i = pixelWidth / 2;
     int j = pixelHeight / 2;
-    life.state[i][j] = true;
-    life.state[i-1][j] = true;
-    life.state[i][j-1] = true;
-    life.state[i][j+1] = true;
-    life.state[i+1][j+1]= true;
+    life.set(i,j, true);
+    life.set(i-1,j,true);
+    life.set(i,j-1,true);
+    life.set(i,j+1, true);
+    life.set(i+1,j+1, true);
 
     // Render loop
     while(window.open) {

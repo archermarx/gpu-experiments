@@ -18,6 +18,7 @@ class Automaton{
             state(nx, std::vector<int>(ny, 0)) {}
 
         int get(unsigned int i, unsigned int j);
+        void set(unsigned int i, unsigned int j, int stateVal);
 
         void draw(Canvas& canvas);
 

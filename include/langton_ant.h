@@ -24,8 +24,7 @@ directions({
 
 class LangtonAnt {
     public:
-        const int nx;
-        const int ny;
+        const int nx, ny;
         std::pair<int, int> pos;
         Direction dir;
         std::vector<std::vector<uint8_t>> state;

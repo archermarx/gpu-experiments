@@ -9,9 +9,10 @@
 
 #include "window.h"
 #include "utils.h"
-#include "langton_ant.h"
 #include "canvas.h"
 #include "shader.h"
+#include "langton_ant.h"
+#include "game_of_life.h"
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
@@ -23,7 +24,7 @@ void processInput(Window window){
 int main(void){
 
     unsigned int width = 1000, height = 1000;
-    unsigned int pixelWidth = 256, pixelHeight = 256;
+    unsigned int pixelWidth = 128, pixelHeight = 128;
 
     // Create a window and check that it worked successfully
     Window window("OpenGL", width, height);
@@ -36,30 +37,40 @@ int main(void){
     Canvas canvas(pixelWidth, pixelHeight);
 
     // Create our ant and associated state
-    LangtonAnt ant(
-        pixelWidth, pixelHeight,
-        std::make_pair(0.8f, 0.2f),
-        0,
-        "RRLLLRLLLRRR",
-        std::vector<Color>({
-            BLACK, CYAN, MAGENTA,
-            YELLOW, RED, GREEN,
-            BLUE, WHITE, Color(127, 127, 127),
-            Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
-        })
-    );
+    // LangtonAnt ant(
+    //     pixelWidth, pixelHeight,
+    //     std::make_pair(0.8f, 0.2f),
+    //     0,
+    //     "RRLLLRLLLRRR",
+    //     std::vector<Color>({
+    //         BLACK, CYAN, MAGENTA,
+    //         YELLOW, RED, GREEN,
+    //         BLUE, WHITE, Color(127, 127, 127),
+    //         Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
+    //     })
+    // );
+
+    GameOfLife life(pixelWidth, pixelHeight);
+
+    int i = pixelWidth / 2;
+    int j = pixelHeight / 2;
+    life.state[i][j] = true;
+    life.state[i-1][j] = true;
+    life.state[i][j-1] = true;
+    life.state[i][j+1] = true;
+    life.state[i+1][j+1]= true;
 
     // Render loop
     while(window.open) {
         // Check for user input
         processInput(window);
 
-        // update the ant state
-        ant.update();
-        ant.draw(canvas);
-
-        // render the canvas
+        // draw state
+        life.draw(canvas);
         canvas.render();
+
+        // update state
+        life.update();
 
         // Check for updates
         window.checkForUpdates();

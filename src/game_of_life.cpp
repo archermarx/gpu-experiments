@@ -28,15 +28,13 @@ void GameOfLife::update() {
 
 int GameOfLife::countNeighbors(int i, int j) {
     int numNeighbors = 0;
-    for (int x_offset = -1; x_offset <= 1; x_offset++) {
-        for (int y_offset = -1; y_offset <= 1; y_offset++) {
-            if (x_offset == 0 && y_offset == 0) {
+    for (int ind_x = i-1; ind_x <= i+1; ind_x++) {
+        for (int ind_y = j-1; ind_y <= j+1; ind_y++) {
+            if (ind_x == i && ind_y == j) {
                 continue;
             }
-            int ind_x = wrap<int>(i + x_offset, nx);
-            int ind_y = wrap<int>(j + y_offset, ny);
 
-            numNeighbors += state[ind_x][ind_y];
+            numNeighbors += get(ind_x, ind_y);
         }
     }
 

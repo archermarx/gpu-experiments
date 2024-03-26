@@ -3,21 +3,20 @@
 
 #include <vector>
 #include "canvas.h"
+#include "automaton.h"
 
-class GameOfLife {
+class GameOfLife : public Automaton{
     public:
-        const int nx, ny;
-        std::vector<std::vector<bool>> state;
-        std::vector<std::vector<bool>> nextState;
+        std::vector<std::vector<int>> nextState;
 
         GameOfLife(int _nx, int _ny) :
-            nx(_nx), ny(_ny),
-            state(nx, std::vector<bool>(ny, 0)),
-            nextState(nx, std::vector<bool>(ny, 0)){}
+            Automaton(_nx, _ny),
+            nextState(_nx, std::vector<int>(_ny, 0)){}
 
         int countNeighbors(int i, int j);
         void update();
         void draw(Canvas& canvas);
+        Color getColor(int stateVal);
 };
 
 #endif

@@ -12,9 +12,10 @@ _DEPS=\
 	window.h \
 	canvas.h \
 	shader.h \
+	color.h	\
+	automaton.h \
 	langton_ant.h \
-	game_of_life.h \
-	color.h
+	game_of_life.h
 
 DEPS=$(addprefix $(INC_DIR)/, $(_DEPS))
 
@@ -25,6 +26,7 @@ _SRCS=\
 	window.cpp  \
 	canvas.cpp 	\
 	shader.cpp	\
+	automaton.cpp \
 	langton_ant.cpp \
 	game_of_life.cpp
 

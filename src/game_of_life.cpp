@@ -3,7 +3,6 @@
 #include "color.h"
 
 void GameOfLife::update() {
-
     for (int i = 0; i < nx; i++) {
         for (int j = 0; j < ny; j++) {
             int numNeighbors = countNeighbors(i, j);
@@ -45,16 +44,10 @@ int GameOfLife::countNeighbors(int i, int j) {
     return numNeighbors;
 }
 
-void GameOfLife::draw(Canvas& canvas) {
-    int pixelIndex = 0;
-    for (auto& row: state) {
-        for (bool alive: row) {
-            auto color = alive ? BLACK : WHITE;
-            canvas.contents[pixelIndex] = color.r;
-            canvas.contents[pixelIndex+1] = color.g;
-            canvas.contents[pixelIndex+2] = color.b;
-            canvas.contents[pixelIndex+3] = 255;
-            pixelIndex += 4;
-        }
+Color GameOfLife::getColor(int state) {
+    if (state) {
+        return CYAN;
+    } else {
+        return BLUE;
     }
 }

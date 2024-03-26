@@ -14,9 +14,8 @@ class GameOfLife : public Automaton{
             nextState(_nx, std::vector<int>(_ny, 0)){}
 
         int countNeighbors(int i, int j);
-        void update();
-        void draw(Canvas& canvas);
-        Color getColor(int stateVal);
+        virtual Color getColor(int stateVal);
+        virtual void update();
 };
 
 #endif

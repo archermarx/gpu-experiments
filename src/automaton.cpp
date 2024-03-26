@@ -14,3 +14,7 @@ void Automaton::draw(Canvas& canvas) {
         }
     }
 }
+
+int Automaton::get(unsigned int i, unsigned int j) {
+    return state[wrap(i, nx)][wrap(j, ny)];
+}

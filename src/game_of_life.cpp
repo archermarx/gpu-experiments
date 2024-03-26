@@ -28,7 +28,6 @@ void GameOfLife::update() {
 
 int GameOfLife::countNeighbors(int i, int j) {
     int numNeighbors = 0;
-
     for (int x_offset = -1; x_offset <= 1; x_offset++) {
         for (int y_offset = -1; y_offset <= 1; y_offset++) {
             if (x_offset == 0 && y_offset == 0) {

@@ -48,8 +48,8 @@ $(EXE): $(OBJS)
 prep:
 	@mkdir -p $(OBJ_DIR)
 
-test:
-	@echo $(OBJS)
+test: $(EXE)
+	./$(EXE)
 
 .PHONY : clean
 

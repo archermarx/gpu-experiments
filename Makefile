@@ -26,7 +26,6 @@ _SRCS=\
 	window.cpp  \
 	canvas.cpp 	\
 	shader.cpp	\
-	automaton.cpp \
 	langton_ant.cpp \
 	game_of_life.cpp
 

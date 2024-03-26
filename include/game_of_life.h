@@ -5,16 +5,16 @@
 #include "canvas.h"
 #include "automaton.h"
 
-class GameOfLife : public Automaton{
+class GameOfLife : public Automaton<bool>{
     public:
-        std::vector<std::vector<int>> nextState;
+        std::vector<std::vector<bool>> nextState;
 
         GameOfLife(int _nx, int _ny) :
-            Automaton(_nx, _ny),
-            nextState(_nx, std::vector<int>(_ny, 0)){}
+            Automaton<bool>(_nx, _ny),
+            nextState(_nx, std::vector<bool>(_ny, 0)){}
 
         int countNeighbors(int i, int j);
-        virtual Color getColor(int stateVal);
+        virtual Color getColor(bool stateVal);
         virtual void update();
 };
 

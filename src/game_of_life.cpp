@@ -41,8 +41,8 @@ int GameOfLife::countNeighbors(int i, int j) {
     return numNeighbors;
 }
 
-Color GameOfLife::getColor(int state) {
-    if (state) {
+Color GameOfLife::getColor(bool stateVal) {
+    if (stateVal) {
         return CYAN;
     } else {
         return BLUE;

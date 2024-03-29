@@ -7,11 +7,11 @@
 
 class GameOfLife : public Automaton<bool>{
     public:
-        std::vector<std::vector<bool>> nextState;
+        std::vector<bool> nextState;
 
         GameOfLife(int _nx, int _ny) :
             Automaton<bool>(_nx, _ny),
-            nextState(_nx, std::vector<bool>(_ny, 0)){}
+            nextState(_nx * _ny, 0){}
 
         int countNeighbors(int i, int j);
         virtual Color getColor(bool stateVal);

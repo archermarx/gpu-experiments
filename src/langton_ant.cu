@@ -31,10 +31,10 @@ LangtonAnt::LangtonAnt(int _nx, int _ny, std::pair<float, float> _pos, Direction
 
 void LangtonAnt::update() {
     // get current board state (false -> black or true -> white)
-    auto currentState = state[pos.first][pos.second];
+    auto currentState = state[index2D(pos.first, pos.second)];
 
     // flip color of square
-    state[pos.first][pos.second] = wrap<uint8_t>(currentState + 1, rules.size());
+    state[index2D(pos.first, pos.second)] = wrap<uint8_t>(currentState + 1, rules.size());
 
     // rotate ant
     if (rules[currentState]) {

@@ -7,17 +7,17 @@ void GameOfLife::update() {
         for (int j = 0; j < ny; j++) {
             int numNeighbors = countNeighbors(i, j);
 
-            if (state[i][j]) {
+            if (state[index2D(i, j)]) {
                 if (numNeighbors < 2 || numNeighbors > 3) {
-                    nextState[i][j] = false;
+                    nextState[index2D(i, j)] = false;
                 } else {
-                    nextState[i][j] = true;
+                    nextState[index2D(i, j)] = true;
                 }
             } else {
                 if (numNeighbors == 3) {
-                    nextState[i][j] = true;
+                    nextState[index2D(i, j)] = true;
                 } else {
-                    nextState[i][j] = false;
+                    nextState[index2D(i, j)] = false;
                 }
             }
         }

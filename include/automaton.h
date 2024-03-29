@@ -34,7 +34,7 @@ class Automaton{
 
         void draw(Canvas& canvas) {
             int pixelIndex = 0;
-            for (int i = 0; i<= nx; i++) {
+            for (int i = 0; i< nx; i++) {
                 for (int j = 0; j < ny; j++) {
                     T stateVal = state[index2D(i, j)];
                     auto color = getColor(stateVal);

@@ -86,9 +86,6 @@ int program() {
         // update state
         automaton.update();
 
-        // Check for updates
-        window.checkForUpdates();
-
         // record iteration stop time
         cudaEventRecord(stop, 0);
         cudaEventSynchronize(stop);
@@ -100,6 +97,9 @@ int program() {
             printf("Avg. frame time: %3.1f ms\n", totalTime / (float) ticks);
             nextOutputTime += outputTimeInterval_ms;
         }
+
+        // Check for updates
+        window.checkForUpdates();
     }
 
     cudaEventDestroy(start);
@@ -110,8 +110,7 @@ int program() {
 
 int main(void){
     int retcode = program();
-    glfwTerminate();
-    std::cout << "Terminated" << std::endl;
+    std::cout << "Program successfully terminated." << std::endl;
     exit(retcode);
 }
 

@@ -49,6 +49,7 @@ void Window::checkForUpdates() {
 
     if (glfwWindowShouldClose(window)) {
         open = false;
+        glfwTerminate();
     } else {
         open = true;
     }

@@ -16,13 +16,13 @@
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(Window window){
-    if (glfwGetKey(window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+void processInput(Window& window){
+    if (glfwGetKey(window.window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window.window, true);
+    }
 }
 
-int main(void){
-
+int program() {
     unsigned int width = 1024, height = 1024;
     unsigned int pixelWidth = 128, pixelHeight = 128;
 
@@ -106,5 +106,12 @@ int main(void){
     cudaEventDestroy(stop);
 
     return 0;
+}
+
+int main(void){
+    int retcode = program();
+    glfwTerminate();
+    std::cout << "Terminated" << std::endl;
+    exit(retcode);
 }
 

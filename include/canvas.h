@@ -28,6 +28,7 @@ class Canvas {
         std::vector<uint8_t> contents;
 
         Canvas(uint32_t w, uint32_t h);
+        ~Canvas();
         void render();
 
     private:

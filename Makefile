@@ -1,13 +1,14 @@
 CC=nvcc
 INC_DIR=include
 LIBS=-lglfw -lGL -lX11 -lXi -lXrandr -ldl
-CPPFLAGS=-I$(INC_DIR)
+CPPFLAGS=-I$(INC_DIR) -g
 SRC_DIR=src
 OBJ_DIR=build
 EXE=run.exe
 
 _DEPS=\
 	glad/glad.h \
+	cuda_helpers.h\
 	utils.h \
 	window.h \
 	canvas.h \

@@ -48,7 +48,6 @@ void Window::checkForUpdates() {
     glfwPollEvents();
 
     if (glfwWindowShouldClose(window)) {
-        glfwTerminate();
         open = false;
     } else {
         open = true;

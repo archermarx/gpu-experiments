@@ -19,9 +19,9 @@ Canvas::Canvas(uint32_t w, uint32_t h)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(SCREEN_QUAD_VERTS), SCREEN_QUAD_VERTS, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(SCREEN_QUAD_VERTS), SCREEN_QUAD_VERTS, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(SCREEN_QUAD_ELEMS), SCREEN_QUAD_ELEMS, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(SCREEN_QUAD_ELEMS), SCREEN_QUAD_ELEMS, GL_DYNAMIC_DRAW);
 
     // Define attributes
     // Position attribute
@@ -55,7 +55,7 @@ void Canvas::render() {
     // update the texture
     glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-        GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)contents.data()
+        GL_RGBA, GL_UNSIGNED_BYTE, contents.data()
     );
     glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -65,4 +65,11 @@ void Canvas::render() {
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+Canvas::~Canvas() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteTextures(1, &texture);
 }

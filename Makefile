@@ -1,7 +1,7 @@
-CC=g++
+CC=nvcc
 INC_DIR=include
-LIBS=-lglfw -lGL -lX11 -lXi -lpthread -lXrandr -ldl
-CPPFLAGS=-pthread -I$(INC_DIR)
+LIBS=-lglfw -lGL -lX11 -lXi -lXrandr -ldl
+CPPFLAGS=-I$(INC_DIR)
 SRC_DIR=src
 OBJ_DIR=build
 EXE=run.exe
@@ -20,18 +20,19 @@ _DEPS=\
 DEPS=$(addprefix $(INC_DIR)/, $(_DEPS))
 
 _SRCS=\
-	main.cpp	\
-	glad.cpp	\
-	utils.cpp	\
-	window.cpp  \
-	canvas.cpp 	\
-	shader.cpp	\
-	langton_ant.cpp \
-	game_of_life.cpp
+	main.cu	\
+	glad.c	\
+	utils.cu	\
+	window.cu  \
+	canvas.cu 	\
+	shader.cu	\
+	langton_ant.cu \
+	game_of_life.cu
 
 SRCS=$(addprefix $(SRC_DIR)/, $(_SRCS))
 
-_OBJS=$(patsubst %.cpp, %.o, $(_SRCS))
+_OBJS_C=$(patsubst %.c, %.o, $(_SRCS))
+_OBJS=$(patsubst %.cu, %.o, $(_OBJS_C))
 OBJS=$(addprefix $(OBJ_DIR)/, $(_OBJS))
 
 # Recipes
@@ -40,7 +41,11 @@ all: prep $(EXE)
 
 remake: clean all
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(DEPS)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(DEPS)
+	@$(CC) -c -o $@ $< $(CPPFLAGS)
+	@echo $<
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cu $(DEPS)
 	@$(CC) -c -o $@ $< $(CPPFLAGS)
 	@echo $<
 
@@ -53,6 +58,9 @@ prep:
 
 test: $(EXE)
 	./$(EXE)
+
+debug:
+	@echo $(_OBJS)
 
 .PHONY : clean
 

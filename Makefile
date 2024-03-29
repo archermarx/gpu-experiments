@@ -1,7 +1,7 @@
 CC=nvcc
 INC_DIR=include
 LIBS=-lglfw -lGL -lX11 -lXi -lXrandr -ldl
-CPPFLAGS=-I$(INC_DIR) -g
+CPPFLAGS=-I$(INC_DIR) -g -rdc=true
 SRC_DIR=src
 OBJ_DIR=build
 EXE=run.exe

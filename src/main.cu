@@ -37,31 +37,31 @@ int program() {
     Canvas canvas(pixelWidth, pixelHeight);
 
     //Create our ant and associated state
-    LangtonAnt automaton(
-        pixelWidth, pixelHeight,
-        std::make_pair(0.8f, 0.2f),
-        0,
-        "RRLLLRLLLRRR",
-        std::vector<Color>({
-            BLACK, CYAN, MAGENTA,
-            YELLOW, RED, GREEN,
-            BLUE, WHITE, Color(127, 127, 127),
-            Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
-        })
-    );
+    // LangtonAnt automaton(
+    //     pixelWidth, pixelHeight,
+    //     std::make_pair(0.8f, 0.2f),
+    //     0,
+    //     "RRLLLRLLLRRR",
+    //     std::vector<Color>({
+    //         BLACK, CYAN, MAGENTA,
+    //         YELLOW, RED, GREEN,
+    //         BLUE, WHITE, Color(127, 127, 127),
+    //         Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
+    //     })
+    // );
 
-    // GameOfLife automaton(pixelWidth, pixelHeight);
+    GameOfLife automaton(pixelWidth, pixelHeight);
 
-    // int i = pixelWidth / 2;
-    // int j = pixelHeight / 2;
-    // automaton.set(i,j, true);
-    // automaton.set(i-1,j,true);
-    // automaton.set(i,j-1,true);
-    // automaton.set(i,j+1, true);
-    // automaton.set(i+1,j+1, true);
+    int i = pixelWidth / 2;
+    int j = pixelHeight / 2;
+    automaton.set(i,j, true);
+    automaton.set(i-1,j,true);
+    automaton.set(i,j-1,true);
+    automaton.set(i,j+1, true);
+    automaton.set(i+1,j+1, true);
 
     int ticks = 0;
-    int outputTimeInterval_ms = 1000;
+    int outputTimeInterval_ms = 100;
     float nextOutputTime;
     float elapsedTime;
     float totalTime = 0;
@@ -73,11 +73,11 @@ int program() {
 
     // Render loop
     while(window.open) {
-        // record iteration start time
-        cudaEventRecord(start, 0);
-
         // Check for user input
         processInput(window);
+
+        // record iteration start time
+        cudaEventRecord(start, 0);
 
         // draw state
         automaton.draw(canvas);

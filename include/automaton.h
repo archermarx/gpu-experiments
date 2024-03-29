@@ -12,31 +12,29 @@ class Automaton{
 
     public:
         const unsigned int nx, ny;
+        const unsigned int stateSize;
         std::vector<T> state;
 
         virtual ~Automaton() {}
 
         Automaton(unsigned int _nx, unsigned int _ny):
             nx(_nx), ny(_ny),
-            state(nx * ny, 0) {}
-
-        int index2D(int i, int j) {
-            return i * ny + j;
-        }
+            state(nx * ny, 0),
+            stateSize(nx * ny * sizeof(T)) {}
 
         T get(unsigned int i, unsigned int j) {
-            return state[index2D(wrap(i, nx), wrap(j, ny))];
+            return state[wrapIndex2D(i, j, nx, ny)];
         }
 
         void set(unsigned int i, unsigned int j, T stateVal){
-            state[index2D(wrap(i, nx), wrap(j, ny))] = stateVal;
+            state[wrapIndex2D(i, j, nx, ny)] = stateVal;
         }
 
         void draw(Canvas& canvas) {
             int pixelIndex = 0;
             for (int i = 0; i< nx; i++) {
                 for (int j = 0; j < ny; j++) {
-                    T stateVal = state[index2D(i, j)];
+                    T stateVal = state[wrapIndex2D(i, j, nx, ny)];
                     auto color = getColor(stateVal);
                     canvas.contents[pixelIndex] = color.r;
                     canvas.contents[pixelIndex+1] = color.g;

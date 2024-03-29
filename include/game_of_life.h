@@ -4,17 +4,21 @@
 #include <vector>
 #include "canvas.h"
 #include "automaton.h"
+#include "cuda_helpers.h"
 
-class GameOfLife : public Automaton<bool>{
+class GameOfLife : public Automaton<char>{
     public:
-        std::vector<bool> nextState;
+        std::vector<char> nextState;
 
-        GameOfLife(int _nx, int _ny) :
-            Automaton<bool>(_nx, _ny),
-            nextState(_nx * _ny, 0){}
+        char *d_state;
+        char *d_nextState;
+        int frame = 0;
+
+        GameOfLife(int _nx, int _ny);
+        ~GameOfLife();
 
         int countNeighbors(int i, int j);
-        virtual Color getColor(bool stateVal);
+        virtual Color getColor(char stateVal);
         virtual void update();
 };
 

@@ -36,32 +36,46 @@ int main(void){
     // Create the canvas of pixels
     Canvas canvas(pixelWidth, pixelHeight);
 
-    // Create our ant and associated state
-    // LangtonAnt automaton(
-    //     pixelWidth, pixelHeight,
-    //     std::make_pair(0.8f, 0.2f),
-    //     0,
-    //     "RRLLLRLLLRRR",
-    //     std::vector<Color>({
-    //         BLACK, CYAN, MAGENTA,
-    //         YELLOW, RED, GREEN,
-    //         BLUE, WHITE, Color(127, 127, 127),
-    //         Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
-    //     })
-    // );
+    //Create our ant and associated state
+    LangtonAnt automaton(
+        pixelWidth, pixelHeight,
+        std::make_pair(0.8f, 0.2f),
+        0,
+        "RRLLLRLLLRRR",
+        std::vector<Color>({
+            BLACK, CYAN, MAGENTA,
+            YELLOW, RED, GREEN,
+            BLUE, WHITE, Color(127, 127, 127),
+            Color(127, 0, 0), Color(0, 127, 0), Color(0, 0, 127)
+        })
+    );
 
-    GameOfLife automaton(pixelWidth, pixelHeight);
+    // GameOfLife automaton(pixelWidth, pixelHeight);
 
-    int i = pixelWidth / 2;
-    int j = pixelHeight / 2;
-    automaton.set(i,j, true);
-    automaton.set(i-1,j,true);
-    automaton.set(i,j-1,true);
-    automaton.set(i,j+1, true);
-    automaton.set(i+1,j+1, true);
+    // int i = pixelWidth / 2;
+    // int j = pixelHeight / 2;
+    // automaton.set(i,j, true);
+    // automaton.set(i-1,j,true);
+    // automaton.set(i,j-1,true);
+    // automaton.set(i,j+1, true);
+    // automaton.set(i+1,j+1, true);
+
+    int ticks = 0;
+    int outputTimeInterval_ms = 1000;
+    float nextOutputTime;
+    float elapsedTime;
+    float totalTime = 0;
+
+    // create timing instrumentation
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
 
     // Render loop
     while(window.open) {
+        // record iteration start time
+        cudaEventRecord(start, 0);
+
         // Check for user input
         processInput(window);
 
@@ -74,7 +88,22 @@ int main(void){
 
         // Check for updates
         window.checkForUpdates();
+
+        // record iteration stop time
+        cudaEventRecord(stop, 0);
+        cudaEventSynchronize(stop);
+        cudaEventElapsedTime(&elapsedTime, start, stop);
+        totalTime += elapsedTime;
+        ticks += 1;
+
+        if (totalTime > nextOutputTime) {
+            printf("Avg. frame time: %3.1f ms\n", totalTime / (float) ticks);
+            nextOutputTime += outputTimeInterval_ms;
+        }
     }
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
 
     return 0;
 }

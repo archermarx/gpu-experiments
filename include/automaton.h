@@ -1,6 +1,7 @@
 #ifndef AUTOMATON_H
 #define AUTOMATON_H
 
+#include <stdio.h>
 #include <vector>
 #include "canvas.h"
 #include "color.h"
@@ -48,7 +49,6 @@ class Automaton{
 
         virtual Color getColor(T stateVal) = 0;
         virtual void update() = 0;
-
 };
 
 #endif

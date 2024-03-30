@@ -57,6 +57,7 @@ void Canvas::render() {
         GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, contents.data()
     );
+
     glBindTexture(GL_TEXTURE_2D, texture);
 
     // Render the triangles

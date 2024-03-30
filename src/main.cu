@@ -24,7 +24,7 @@ void processInput(Window& window){
 
 int program() {
     unsigned int width = 1024, height = 1024;
-    unsigned int pixelWidth = 128, pixelHeight = 128;
+    unsigned int pixelWidth = 512, pixelHeight = 512;
 
     // Create a window and check that it worked successfully
     Window window("OpenGL", width, height);
@@ -36,7 +36,7 @@ int program() {
     // Create the canvas of pixels
     Canvas canvas(pixelWidth, pixelHeight);
 
-    //Create our ant and associated state
+    // Create our ant and associated state
     // LangtonAnt automaton(
     //     pixelWidth, pixelHeight,
     //     std::make_pair(0.8f, 0.2f),
@@ -54,11 +54,17 @@ int program() {
 
     int i = pixelWidth / 2;
     int j = pixelHeight / 2;
-    automaton.set(i,j, true);
-    automaton.set(i-1,j,true);
-    automaton.set(i,j-1,true);
-    automaton.set(i,j+1, true);
-    automaton.set(i+1,j+1, true);
+
+    automaton.set(i,j-1, 1);
+    automaton.set(i,j, 1);
+    automaton.set(i,j+1, 1);
+    automaton.set(i+2,j, 1);
+    automaton.set(i+2,j+1, 1);
+    automaton.set(i+2,j+2, 1);
+    automaton.set(i+3,j+1, 1);
+    automaton.set(i-2,j-2, 1);
+    automaton.set(i-2,j-3, 1);
+    automaton.set(i-4,j-3, 1);
 
     int ticks = 0;
     int outputTimeInterval_ms = 100;
@@ -94,12 +100,14 @@ int program() {
         ticks += 1;
 
         if (totalTime > nextOutputTime) {
-            printf("Avg. frame time: %3.1f ms\n", totalTime / (float) ticks);
+            printf("Tick %d, avg. frame time: %3.1f ms\n", ticks, totalTime / (float) ticks);
             nextOutputTime += outputTimeInterval_ms;
         }
 
         // Check for updates
         window.checkForUpdates();
+
+        //delay(1000);
     }
 
     cudaEventDestroy(start);

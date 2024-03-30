@@ -21,7 +21,7 @@ T wrap (T a, T b) {
 
 inline __host__ __device__
 int wrapIndex2D(int i, int j, int nx, int ny) {
-    return wrap(j, ny) + wrap(i, nx) * ny;
+    return wrap(i, nx) + nx * wrap(j, ny);
 }
 
 #endif

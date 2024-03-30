@@ -32,11 +32,11 @@ class Automaton{
 
         void draw(Canvas& canvas) {
             int pixelIndex = 0;
-            for (int i = 0; i< nx; i++) {
-                for (int j = 0; j < ny; j++) {
+            for (int j = 0; j < ny; j++) {
+                for (int i = 0; i < nx; i++) {
                     T stateVal = state[wrapIndex2D(i, j, nx, ny)];
                     auto color = getColor(stateVal);
-                    canvas.contents[pixelIndex] = color.r;
+                    canvas.contents[pixelIndex  ] = color.r;
                     canvas.contents[pixelIndex+1] = color.g;
                     canvas.contents[pixelIndex+2] = color.b;
                     canvas.contents[pixelIndex+3] = 255;

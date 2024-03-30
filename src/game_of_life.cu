@@ -1,6 +1,9 @@
 #include "game_of_life.h"
 #include "color.h"
 
+const int BLOCK_SIZE_X = 32;
+const int BLOCK_SIZE_Y = 32;
+
  GameOfLife::GameOfLife(int _nx, int _ny):
     Automaton<char>(_nx, _ny), nextState(_nx * _ny, 0){
 
@@ -39,9 +42,8 @@ void GameOfLife::update() {
     }
 
     // launch kernel
-    const int BLOCK_SIZE = 16;
-    dim3 blockSize(BLOCK_SIZE, BLOCK_SIZE,1);
-    dim3 gridSize(nx/BLOCK_SIZE, ny/BLOCK_SIZE, 1);
+    dim3 blockSize(BLOCK_SIZE_X, BLOCK_SIZE_Y,1);
+    dim3 gridSize(nx/BLOCK_SIZE_X, ny/BLOCK_SIZE_Y, 1);
 
     kernel_gameOfLife<<<gridSize, blockSize>>>(d_nextState, d_state, nx, ny);
 

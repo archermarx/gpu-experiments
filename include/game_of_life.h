@@ -8,8 +8,6 @@
 
 class GameOfLife : public Automaton<char>{
     public:
-        std::vector<char> nextState;
-
         char *d_state;
         char *d_nextState;
         int frame = 0;

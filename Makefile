@@ -8,7 +8,7 @@ EXE=run.exe
 
 _DEPS=\
 	glad/glad.h \
-	cuda_helpers.h\
+	cuda_helpers.h \
 	utils.h \
 	window.h \
 	canvas.h \
@@ -16,7 +16,8 @@ _DEPS=\
 	color.h	\
 	automaton.h \
 	langton_ant.h \
-	game_of_life.h
+	game_of_life.h \
+	reaction_diffusion.h
 
 DEPS=$(addprefix $(INC_DIR)/, $(_DEPS))
 
@@ -28,7 +29,8 @@ _SRCS=\
 	canvas.cu 	\
 	shader.cu	\
 	langton_ant.cu \
-	game_of_life.cu
+	game_of_life.cu \
+	reaction_diffusion.cu
 
 SRCS=$(addprefix $(SRC_DIR)/, $(_SRCS))
 

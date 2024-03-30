@@ -13,6 +13,7 @@
 #include "shader.h"
 #include "langton_ant.h"
 #include "game_of_life.h"
+#include "reaction_diffusion.h"
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------

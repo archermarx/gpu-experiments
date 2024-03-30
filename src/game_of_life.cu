@@ -5,7 +5,7 @@ const int BLOCK_SIZE_X = 32;
 const int BLOCK_SIZE_Y = 32;
 
  GameOfLife::GameOfLife(int _nx, int _ny):
-    Automaton<char>(_nx, _ny), nextState(_nx * _ny, 0){
+    Automaton<char>(_nx, _ny) {
 
     // Allocate CUDA arrays
     CUDA_CHECK( cudaMalloc((void**) &d_state,     stateSize) );

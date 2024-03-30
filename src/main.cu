@@ -25,7 +25,7 @@ void processInput(Window& window){
 
 int program() {
     unsigned int width = 1024, height = 1024;
-    unsigned int pixelWidth = 512, pixelHeight = 512;
+    unsigned int pixelWidth = 256, pixelHeight = 256;
 
     // Create a window and check that it worked successfully
     Window window("OpenGL", width, height);
@@ -51,21 +51,32 @@ int program() {
     //     })
     // );
 
-    GameOfLife automaton(pixelWidth, pixelHeight);
+    // GameOfLife automaton(pixelWidth, pixelHeight);
 
-    int i = pixelWidth / 2;
-    int j = pixelHeight / 2;
+    // int i = pixelWidth / 2;
+    // int j = pixelHeight / 2;
 
-    automaton.set(i,j-1, 1);
-    automaton.set(i,j, 1);
-    automaton.set(i,j+1, 1);
-    automaton.set(i+2,j, 1);
-    automaton.set(i+2,j+1, 1);
-    automaton.set(i+2,j+2, 1);
-    automaton.set(i+3,j+1, 1);
-    automaton.set(i-2,j-2, 1);
-    automaton.set(i-2,j-3, 1);
-    automaton.set(i-4,j-3, 1);
+    // automaton.set(i,j-1, 1);
+    // automaton.set(i,j, 1);
+    // automaton.set(i,j+1, 1);
+    // automaton.set(i+2,j, 1);
+    // automaton.set(i+2,j+1, 1);
+    // automaton.set(i+2,j+2, 1);
+    // automaton.set(i+3,j+1, 1);
+    // automaton.set(i-2,j-2, 1);
+    // automaton.set(i-2,j-3, 1);
+    // automaton.set(i-4,j-3, 1);
+
+    float dt = 1;
+    float du2 = 2e-5;
+    float dv2 = 1e-5;
+    float f = 0.03;
+    float k = 0.055;
+
+    ReactionDiffusion automaton(
+        pixelWidth, pixelHeight,
+        dt, du2, dv2, k, f
+    );
 
     int ticks = 0;
     int outputTimeInterval_ms = 100;

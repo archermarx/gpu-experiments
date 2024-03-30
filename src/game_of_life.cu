@@ -1,8 +1,6 @@
 #include "game_of_life.h"
 #include "color.h"
 
-const int BLOCK_SIZE_X = 32;
-const int BLOCK_SIZE_Y = 32;
 
  GameOfLife::GameOfLife(int _nx, int _ny):
     Automaton<char>(_nx, _ny) {
@@ -40,6 +38,9 @@ void GameOfLife::update() {
     if (frame == 0) {
         cudaMemcpy( d_state, state.data(), stateSize, cudaMemcpyHostToDevice);
     }
+
+    const int BLOCK_SIZE_X = 32;
+    const int BLOCK_SIZE_Y = 32;
 
     // launch kernel
     dim3 blockSize(BLOCK_SIZE_X, BLOCK_SIZE_Y,1);

@@ -70,8 +70,8 @@ int program() {
     float dt = 1;
     float du2 = 2e-5;
     float dv2 = 1e-5;
-    float f = 0.03;
-    float k = 0.055;
+    float f = 0.034;
+    float k = 0.058;
 
     ReactionDiffusion automaton(
         pixelWidth, pixelHeight,

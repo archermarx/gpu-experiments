@@ -40,9 +40,9 @@ ReactionDiffusion::ReactionDiffusion(int _nx, int _ny, float _dt, float _du, flo
 }
 
 Color ReactionDiffusion::getColor(float stateVal) {
-    float t = (stateVal -0.3f) / 0.7f;
-    int ind = (int) (TURBO.size() - 1) * t;
-    return TURBO[ind];
+    float t = std::clamp((stateVal -0.3f) / 0.7f, 0.0f, 1.0f);
+    int ind = static_cast<int>((TURBO.size() - 1) * t);
+    return TURBO.at(ind);
 }
 
 __global__

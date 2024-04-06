@@ -67,11 +67,11 @@ int program() {
     // automaton.set(i-2,j-3, 1);
     // automaton.set(i-4,j-3, 1);
 
-    float dt = 1;
+    float dt = 1.0;
     float du2 = 2e-5;
     float dv2 = 1e-5;
     float f = 0.034;
-    float k = 0.058;
+    float k = 0.059;
 
     ReactionDiffusion automaton(
         pixelWidth, pixelHeight,
